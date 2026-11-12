@@ -1,0 +1,58 @@
+nohup python -u scripts/plot_msp_wpro_manifold.py \
+  --config configs/msp_podcast_wpro_config.yaml \
+  --checkpoint checkpoints/method2_msp_wpro_best_bak.pt \
+  --tsv datasets/MSP-Podcast/msp_podcast.tsv \
+  --output results/msp_wpro_manifold \
+  --device cuda:1 \
+  --run_sweep \
+  > logs/plot_msp_wpro_manifold.out 2>&1 &
+
+
+nohup python -u train/train_method2_msp_wpro_ablation_no_avsup.py \
+  --config configs/msp_podcast_wpro_ablation_no_avsup_config.yaml \
+  --tsv datasets/MSP-Podcast/msp_podcast.tsv \
+  --output_dir checkpoints/method2_msp_wpro_ablation_no_avsup \
+  --device cuda:1 \
+  > logs/train_method2_msp_wpro_ablation_no_avsup.out 2>&1 &
+
+nohup python -u train/train_method2_kfold_lite_minilm_egemaps.py \
+  --config configs/method2_lite_minilm_egemaps_config.yaml \
+  --csv datasets/IEMOCAP_KFOLD/tenfolds/all.csv \
+  --output_dir checkpoints/method2_kfold_lite_minilm_egemaps \
+  --device cuda:0 \
+  > logs/train_method2_kfold_lite_minilm_egemaps.out 2>&1 &
+
+
+nohup python -u train/train_method2_msp_lite_minilm_egemaps.py \
+  --config configs/msp_podcast_lite_minilm_egemaps_config.yaml \
+  --tsv datasets/MSP-Podcast/msp_podcast.tsv \
+  --output_dir checkpoints/method2_msp_lite_minilm_egemaps \
+  --device cuda:0 \
+  > logs/train_method2_msp_lite_minilm_egemaps.out 2>&1 &
+
+nohup python -u train/train_method2_msp_lite_albert_egemaps.py \
+  --config configs/msp_podcast_lite_albert_egemaps_config.yaml \
+  --tsv datasets/MSP-Podcast/msp_podcast.tsv \
+  --output_dir checkpoints/method2_msp_lite_albert_egemaps \
+  --device cuda:0 \
+  > logs/train_method2_msp_lite_albert_egemaps.out 2>&1 &
+
+
+nohup python -u train/train_method2_kfold_lite_albert_egemaps.py \
+  --config configs/method2_lite_albert_egemaps_config.yaml \
+  --csv datasets/IEMOCAP_KFOLD/tenfolds/all.csv \
+  --output_dir checkpoints/method2_kfold_lite_albert_egemaps \
+  --device cuda:1 \
+  --resume_fold 4 \
+  --resume_checkpoint checkpoints/method2_kfold_lite_albert_egemaps/fold_4/last_model.pt \
+  > logs/train_method2_kfold_lite_albert_egemaps_resume_fold4.out 2>&1 &
+
+
+nohup python -u train/train_method2_kfold_lite_minilm_egemaps.py \
+  --config configs/method2_lite_minilm_egemaps_config.yaml \
+  --csv datasets/IEMOCAP_KFOLD/tenfolds/all.csv \
+  --output_dir checkpoints/method2_kfold_lite_minilm_egemaps \
+  --device cuda:0 \
+  --resume_fold 5 \
+  --resume_checkpoint checkpoints/method2_kfold_lite_minilm_egemaps/fold_5/last_model.pt \
+  > logs/train_method2_kfold_lite_minilm_egemaps_resume_fold5.out 2>&1 &

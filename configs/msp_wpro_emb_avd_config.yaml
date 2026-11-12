@@ -1,0 +1,53 @@
+# MSP-Podcast with precomputed embeddings (wavlm, wpro, roberta) for AVD + emotion
+
+# Data
+data:
+  embedding_dir: "datasets/MSP-Podcast/embeddings"
+  batch_size: 128
+  num_workers: 4
+  four_class_only: true
+  normalize_av: true
+
+# Model
+model:
+  name: "method2_emb_fusion_avd"
+  wavlm_dim: 768
+  wpro_dim: 1024
+  roberta_dim: 768
+  hidden_dim: 256
+  dropout: 0.1
+  av_hidden: 128
+  num_emotions: 4
+
+# Training
+training:
+  epochs: 10
+  learning_rate: 0.0005
+  weight_decay: 0.00001
+  device: "cuda:0"
+
+# Loss
+loss:
+  emotion_weight: 1.0
+  arousal_weight: 1.0
+  valence_weight: 1.0
+  dominance_weight: 1.0
+
+# Optimizer
+optimizer:
+  type: "adamw"
+  betas: [0.9, 0.999]
+  eps: 1.0e-08
+
+# Scheduler
+scheduler:
+  type: "reduce_on_plateau"
+  mode: "max"
+  factor: 0.5
+  patience: 3
+  min_lr: 1.0e-06
+
+# Paths
+paths:
+  checkpoint_dir: "checkpoints/msp_wpro_emb_avd"
+  log_dir: "logs/msp_wpro_emb_avd"

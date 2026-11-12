@@ -1,0 +1,38 @@
+# MSP-Podcast emotion2vec embedding config
+
+data:
+  tsv_path: "datasets/MSP-Podcast/msp_podcast.tsv"
+  embedding_dir: "/home4/quanpn/ICME2026/only_gay/outputs/msp_podcast/emotion2vec_base_npy"
+  four_class_only: true
+
+model:
+  num_emotions: 4
+  input_dim: 768
+  hidden_dim: 256
+  av_refinement_layers: 2
+
+training:
+  batch_size: 128
+  epochs: 10
+  learning_rate: 0.0005
+  weight_decay: 0.00001
+  num_workers: 0
+
+loss:
+  emotion_weight: 1.0
+  arousal_weight: 1.0
+  valence_weight: 1.0
+
+optimizer:
+  betas: [0.9, 0.999]
+  eps: 1.0e-08
+
+scheduler:
+  type: "reduce_on_plateau"
+  mode: "max"
+  factor: 0.5
+  patience: 3
+
+paths:
+  tensorboard_dir: "logs/tensorboard"
+  checkpoint_dir: "checkpoints/msp_emotion2vec_av"

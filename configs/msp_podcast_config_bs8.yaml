@@ -1,0 +1,75 @@
+# Configuration for Method 2: Cross-Attention A-V on MSP-Podcast
+# Batch size 8, Device cuda:2, Continue training from checkpoint
+
+# Data
+data:
+  tsv_path: "datasets/MSP-Podcast/msp_podcast.tsv"
+  max_audio_length: 160000  # 10 seconds at 16kHz
+  max_text_length: 128      # Maximum text tokens
+  sample_rate: 16000
+
+# Model
+model:
+  name: "method2_crossattn_av"
+  wavlm_model_name: "microsoft/wavlm-base-plus"
+  roberta_model_name: "roberta-base"
+  num_emotions: 4  # ang, hap, neu, sad
+  hidden_dim: 256
+  av_refinement_layers: 2
+  freeze_wavlm: true
+  freeze_roberta: true
+  num_cross_attn_heads: 8
+  post_attention_layers: 2
+  av_prediction_layers: 3
+
+# Training
+training:
+  batch_size: 8  # Increased for cuda:2
+  epochs: 20     # Total epochs: 10 (already done) + 10 (additional)
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  num_workers: 4
+
+# Loss
+loss:
+  type: "ccc"  # CCC recommended for continuous A-V values
+  emotion_weight: 1.0
+  arousal_weight: 1.0  # Equal importance with emotion
+  valence_weight: 1.0  # Equal importance with emotion
+
+# Optimizer
+optimizer:
+  type: "adamw"
+  betas: [0.9, 0.999]
+  eps: 1.0e-08
+
+# Scheduler
+scheduler:
+  type: "reduce_on_plateau"
+  mode: "max"
+  factor: 0.5
+  patience: 3  # Reduced from 5 since we have fewer epochs
+  min_lr: 1.0e-06
+
+# Paths
+paths:
+  log_dir: "logs"
+  checkpoint_dir: "checkpoints/method2_msp_bs8_cuda2"
+  tensorboard_dir: "logs/tensorboard"
+
+# Device
+device: "cuda:2"
+
+# Misc
+seed: 42
+
+# Checkpoint to resume from
+resume_from: "checkpoints/method2_msp/best_model.pt"
+
+# Dataset info
+# MSP-Podcast splits (4-class only):
+# - Train: 129,064 samples
+# - Dev: 23,885 samples
+# - Test1: 33,430 samples
+# - Test2: 10,712 samples
+# Total: 197,091 samples (92.6% of full dataset)

@@ -1,0 +1,65 @@
+# MSP-Podcast 8-class config using W-PRO for prosody branch
+
+# Data
+data:
+  tsv_path: "datasets/MSP-Podcast/msp_podcast.tsv"
+  max_audio_length: 160000
+  max_text_length: 128
+  sample_rate: 16000
+  four_class_only: false
+
+# Model
+model:
+  name: "method2_crossattn_av"
+  wavlm_model_name: "microsoft/wavlm-base-plus"  # final WavLM
+  wavlm_prosody_model_name: "Orange/Speaker-wavLM-pro"  # W-PRO for prosody
+  roberta_model_name: "roberta-base"
+  num_emotions: 8  # 8-class: ang, con, dis, fea, hap, neu, sad, sur
+  hidden_dim: 256
+  av_refinement_layers: 2
+  freeze_wavlm: true
+  freeze_roberta: true
+  num_cross_attn_heads: 8
+  post_attention_layers: 2
+  av_prediction_layers: 3
+
+# Training
+training:
+  batch_size: 8
+  epochs: 10
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  num_workers: 4
+
+# Loss
+loss:
+  type: "ccc"
+  emotion_weight: 1.0
+  arousal_weight: 1.0
+  valence_weight: 1.0
+
+# Optimizer
+optimizer:
+  type: "adamw"
+  betas: [0.9, 0.999]
+  eps: 1.0e-08
+
+# Scheduler
+scheduler:
+  type: "reduce_on_plateau"
+  mode: "max"
+  factor: 0.5
+  patience: 3
+  min_lr: 1.0e-06
+
+# Paths
+paths:
+  log_dir: "logs"
+  checkpoint_dir: "checkpoints/method2_msp_wpro_8class"
+  tensorboard_dir: "logs/tensorboard"
+
+# Device
+device: "cuda:0"
+
+# Misc
+seed: 42

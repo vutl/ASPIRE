@@ -1,0 +1,22 @@
+# Datasets, data loaders and generated training outputs
+/datasets/
+/data/
+/checkpoints/
+/logs/
+/outputs/
+/results/
+
+# Local agent configuration and runtime artifacts
+/.codex
+/.agents/
+/av_scatter/
+/dataset_audit_report.json
+__pycache__/
+*.py[cod]
+*.backup
+*.log
+nohup.out
+.env
+.env.*
+!.env.example
+.DS_Store

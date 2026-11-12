@@ -1,0 +1,56 @@
+# MSP-Podcast config using W-PRO for prosody branch
+# No A/V supervision, classification only
+
+data:
+  tsv_path: "datasets/MSP-Podcast/msp_podcast.tsv"
+  max_audio_length: 160000
+  max_text_length: 128
+  sample_rate: 16000
+
+model:
+  name: "method2_crossattn_av_ablation_no_avsup"
+  wavlm_model_name: "microsoft/wavlm-base-plus"
+  wavlm_prosody_model_name: "Orange/Speaker-wavLM-pro"
+  roberta_model_name: "roberta-base"
+  num_emotions: 4
+  hidden_dim: 256
+  av_refinement_layers: 2
+  freeze_wavlm: true
+  freeze_roberta: true
+  num_cross_attn_heads: 8
+  post_attention_layers: 2
+  av_prediction_layers: 3
+
+training:
+  batch_size: 4
+  epochs: 10
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  num_workers: 0
+  pin_memory: true
+
+loss:
+  type: "ce"
+  use_focal: false
+  focal_alpha: 1.0
+  focal_gamma: 2.0
+
+optimizer:
+  type: "adamw"
+  betas: [0.9, 0.999]
+  eps: 1.0e-08
+
+scheduler:
+  type: "reduce_on_plateau"
+  mode: "max"
+  factor: 0.5
+  patience: 3
+  min_lr: 1.0e-06
+
+paths:
+  log_dir: "logs"
+  checkpoint_dir: "checkpoints/method2_msp_wpro_ablation_no_avsup"
+  tensorboard_dir: "logs/tensorboard"
+
+device: "cuda:0"
+seed: 42

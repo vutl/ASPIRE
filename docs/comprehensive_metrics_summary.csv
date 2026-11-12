@@ -1,0 +1,5 @@
+Model,Dataset,Split,Accuracy,F1_macro,F1_weighted,Arousal_CCC,Valence_CCC,Arousal_Pearson,Valence_Pearson,Arousal_MAE,Valence_MAE,Silhouette,DaviesBouldin,Circumplex_Alignment
+method2_kfold,IEMOCAP,5-fold-avg,0.7192,0.7056,0.7156,0.6702,0.6282,0.7012,0.6591,0.4765,0.5218,0.1085,2.3908,0.8661
+method2_kfold_wpro,IEMOCAP,5-fold-avg,0.7236,0.7073,0.7191,0.6684,0.6683,0.7068,0.6832,0.4803,0.5118,0.0899,2.5914,0.8614
+method2_msp,MSP-Podcast,test1,0.3319,0.2384,0.3313,0.7014,0.6435,0.7292,0.6467,0.5690,0.6895,0.0824,2.2195,0.8991
+method2_msp_wpro,MSP-Podcast,test1,0.3061,0.2203,0.3064,0.6915,0.7232,0.7268,0.7280,0.5880,0.6598,0.0991,2.1979,0.8691

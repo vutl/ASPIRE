@@ -1,0 +1,39 @@
+# Configuration for Method 2 A-V with OpenSMILE (5-Fold Cross-Validation)
+# IEMOCAP Dataset
+# Architecture: WavLM + RoBERTa + OpenSMILE features → Cross-Attention → A-V + Emotion
+
+# Data
+wavlm_dir: "datasets/IEMOCAP/wavlm_embeddings"
+roberta_dir: "datasets/IEMOCAP/roberta_embeddings"
+opensmile_dir: "outputs/iemocap/egemaps_npy"
+mapping_json: "outputs/iemocap/egemaps_npy/mapping.json"
+
+# Model
+audio_dim: 768  # WavLM-base-plus output dimension
+text_dim: 768   # RoBERTa-base output dimension
+prosody_dim: 88 # OpenSMILE eGeMAPS dimension
+hidden_dim: 256
+num_emotions: 4  # hap, sad, neu, ang
+num_transformer_layers: 4
+num_heads: 4
+ff_dim: 512
+dropout: 0.1
+
+# Training
+# Reduced batch_size to avoid OOM with WavLM+RoBERTa; enforce 30 epochs
+batch_size: 8
+epochs: 30
+learning_rate: 0.0001
+weight_decay: 0.00001
+
+# Scheduler
+scheduler_type: "cosine_annealing"
+
+# Logging
+log_dir: "logs/iemocap_method2_opensmile_tensorboard"
+
+# Device
+device: "cuda:0"
+
+# Misc
+seed: 42

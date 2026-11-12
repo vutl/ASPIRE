@@ -1,0 +1,34 @@
+# Configuration for OpenSMILE Emotion Classifier (5-Fold Cross-Validation)
+# IEMOCAP Dataset
+# Simple baseline: OpenSMILE features only → MLP → 4-class emotion
+
+# Data
+opensmile_dir: "outputs/iemocap/egemaps_npy"
+mapping_json: "outputs/iemocap/egemaps_npy/mapping.json"
+
+# Model
+input_dim: 88  # OpenSMILE eGeMAPS feature dimension
+hidden_dim: 256
+num_emotions: 4  # hap, sad, neu, ang
+num_transformer_layers: 4
+num_heads: 4
+ff_dim: 512
+dropout: 0.1
+
+# Training
+batch_size: 64
+epochs: 50
+learning_rate: 0.0001
+weight_decay: 0.00001
+
+# Scheduler
+scheduler_type: "cosine_annealing"
+
+# Logging
+log_dir: "logs/iemocap_opensmile_emotion_tensorboard"
+
+# Device
+device: "cuda:0"
+
+# Misc
+seed: 42

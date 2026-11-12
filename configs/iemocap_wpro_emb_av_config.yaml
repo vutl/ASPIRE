@@ -1,0 +1,35 @@
+# IEMOCAP Method2 W-PRO (embeddings) AV config
+
+data:
+  batch_size: 128
+  num_workers: 4
+  val_size: 0.2
+  random_state: 42
+
+model:
+  num_emotions: 4
+  wavlm_dim: 768
+  wpro_dim: 1024
+  roberta_dim: 768
+  hidden_dim: 256
+  dropout: 0.1
+  av_hidden: 128
+
+training:
+  epochs: 10
+  learning_rate: 0.0005
+  weight_decay: 0.00001
+
+loss:
+  emotion_weight: 1.0
+  arousal_weight: 1.0
+  valence_weight: 1.0
+
+scheduler:
+  factor: 0.5
+  patience: 3
+  min_lr: 1.0e-06
+
+paths:
+  checkpoint_dir: "checkpoints/iemocap_wpro_emb_av"
+  log_dir: "logs/iemocap_wpro_emb_av"

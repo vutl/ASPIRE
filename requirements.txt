@@ -1,0 +1,23 @@
+# Core dependencies
+torch>=2.0.0
+torchaudio>=2.0.0
+transformers>=4.30.0
+
+# Data processing
+pandas>=1.5.0
+numpy>=1.23.0
+
+# Training utilities
+scikit-learn>=1.2.0
+tqdm>=4.65.0
+tensorboard>=2.13.0
+
+# Audio processing
+librosa>=0.10.0  # Optional, for advanced audio preprocessing
+
+# Visualization (optional)
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Huggingface hub
+huggingface-hub>=0.16.0

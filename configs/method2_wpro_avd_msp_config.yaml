@@ -1,0 +1,83 @@
+# Configuration for Method 2 with W-PRO: Cross-Attention A-V-D with WavLM-Pro for Prosody
+# MSP-Podcast Dataset
+# This config uses Orange/Speaker-wavLM-pro for prosody branch (specialized non-timbral features)
+
+# Data
+data:
+  train_csv: "datasets/MSP-Podcast/labels_consensus_train.csv"
+  dev_csv: "datasets/MSP-Podcast/labels_consensus_dev.csv"
+  test1_csv: "datasets/MSP-Podcast/labels_consensus_test1.csv"
+  test2_csv: "datasets/MSP-Podcast/labels_consensus_test2.csv"
+  max_audio_length: 160000  # 10 seconds at 16kHz
+  max_text_length: 128      # Maximum text tokens
+  sample_rate: 16000
+
+# Model
+model:
+  name: "method2_crossattn_avd"
+  wavlm_model_name: "microsoft/wavlm-base-plus"  # For final WavLM branch
+  wavlm_prosody_model_name: "Orange/Speaker-wavLM-pro"  # W-PRO for prosody branch (non-timbral features)
+  roberta_model_name: "roberta-base"
+  num_emotions: 8
+  hidden_dim: 256
+  av_refinement_layers: 2
+  freeze_wavlm: true  # Freeze ALL WavLM models (prosody + final)
+  freeze_roberta: true  # Freeze RoBERTa
+  num_cross_attn_heads: 8
+  post_attention_layers: 2
+  av_prediction_layers: 3
+
+# Training
+training:
+  batch_size: 4
+  epochs: 10
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  num_workers: 0
+
+# Loss
+loss:
+  type: "ccc"  # CCC recommended for continuous A-V-D values
+  emotion_weight: 1.0
+  arousal_weight: 1.0
+  valence_weight: 1.0
+  dominance_weight: 1.0  # NEW: Equal importance with other dimensions
+
+# Optimizer
+optimizer:
+  type: "adamw"
+  betas: [0.9, 0.999]
+  eps: 1.0e-08
+
+# Scheduler
+scheduler:
+  type: "reduce_on_plateau"
+  mode: "max"
+  factor: 0.5
+  patience: 3
+  min_lr: 1.0e-06
+
+# Paths
+paths:
+  log_dir: "logs"
+  checkpoint_dir: "checkpoints/method2_msp_wpro_avd"
+  tensorboard_dir: "logs/tensorboard"
+
+# Device
+device: "cuda:0"
+
+# Misc
+seed: 42
+
+# Notes
+# A-V-D VERSION (3D emotional space):
+# - Arousal: Energy/activation level
+# - Valence: Positive/negative sentiment
+# - Dominance: Control/power in interaction (NEW)
+# 
+# Key changes from A-V version:
+# 1. Model outputs 3 continuous values (arousal + valence + dominance)
+# 2. Loss function includes dominance_weight
+# 3. Avg CCC = (arousal_ccc + valence_ccc + dominance_ccc) / 3
+# 4. Saves to method2_msp_wpro_avd/ directory
+# 5. MSP-Podcast has 8 emotion categories vs IEMOCAP's 4
